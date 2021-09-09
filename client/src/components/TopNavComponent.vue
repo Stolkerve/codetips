@@ -1,0 +1,83 @@
+<template>
+  <v-container class="py-0 fill-height">
+    <v-row no-gutters align="center">
+      <v-col
+        :class="
+          !this.$vuetify.breakpoint.smAndDown ? '' : 'd-flex justify-center'
+        "
+        :cols="!this.$vuetify.breakpoint.smAndDown ? 'auto' : ''"
+        :order="isLogging ? 2 : 1"
+      >
+        <v-btn
+          style="font-family: 'Libre Baskerville', serif !important"
+          class="pa-0 title no-background-hover"
+          :ripple="false"
+          to="/"
+          text
+          >CodeTips</v-btn
+        >
+      </v-col>
+      <v-col
+        v-if="!this.$vuetify.breakpoint.smAndDown"
+        class="d-flex justify-end"
+        order="12"
+      >
+        <v-responsive max-width="600">
+          <v-text-field dense flat hide-details rounded solo-inverted>
+          </v-text-field>
+        </v-responsive>
+      </v-col>
+      <template v-if="isLogging && !this.$vuetify.breakpoint.smAndDown">
+        <v-col class="mr-4" cols="auto" order="1">
+          <v-avatar color="grey darken-1" size="32"></v-avatar>
+        </v-col>
+        <v-col cols="auto" order="3">
+          <v-btn
+            class="no-background-hover"
+            v-on:click="dialogCallback()"
+            icon
+            dark
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+        </v-col>
+        <v-col cols="auto" order="4">
+          <v-btn
+            class="no-background-hover"
+            icon
+            dark
+            ><v-icon>mdi-bell</v-icon></v-btn
+          >
+        </v-col>
+      </template>
+      <template v-if="!isLogging">
+        <v-col
+          :class="this.$vuetify.breakpoint.smAndDown ? 'd-flex justify-end' : ''"
+          order="2"
+        >
+          <v-btn
+            class="pa-0 mx-1 no-background-hover"
+            to="/login"
+            small
+            text
+          >Login</v-btn>
+          <v-btn
+            class="pa-0 mx-1 no-background-hover"
+            to="/signup"
+            small
+            text
+          >SignUp</v-btn>
+        </v-col>
+      </template>
+    </v-row>
+  </v-container>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+
+@Component
+export default class TopNavComponent extends Vue {
+  @Prop() isLogging!: boolean;
+  @Prop() dialogCallback!: any;
+}
+</script>
