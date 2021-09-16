@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 dotenv.config()
 function main() {
   const app = new App();
-  app.run(process.env.PORT || 3000);
+  app.run(process.env.PORT!);
 }
 
 main();

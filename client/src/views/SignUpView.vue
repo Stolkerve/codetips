@@ -77,7 +77,10 @@
 
 <script lang="ts">
 import {Vue, Component} from "vue-property-decorator"
+
 import AuthServise from "@/services/AuthService"
+import {emailRules, passwordRules} from "@/utils/validateRules"
+
 @Component
 export default class SignUpView extends Vue {
   username: string = "";
@@ -92,20 +95,11 @@ export default class SignUpView extends Vue {
 
   userRules = [
     (v: string) => !!v || 'Name is required.',
-  ]
+  ];
 
-  emailRules = [
-    (v: string) => !!v || 'Email is required.',
-    (v: string) => {
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return pattern.test(v) || 'Invalid e-mail.'
-    }
-  ]
+  emailRules = emailRules;
 
-  passwordRules = [
-    (v: string) => !!v || "Password is required",
-    (v: string) => (v && v.length > 8) || "Password most be greater than 8 characters",
-  ]
+  passwordRules = passwordRules;
 
   async onSubmit() {
     if(this.validate()) {

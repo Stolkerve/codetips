@@ -5,10 +5,10 @@ export class MySqlConnection
   private static connection: Connection;
   static async Init() {
     this.connection = await mysql2.createConnection({
-      host: process.env.DB_HOST || "localhost",
-      port: Number(process.env.DB_PORT) || 3306,
-      user: process.env.DB_USER || "root",
-      password: process.env.DB_PASSWORD || "123",
+      host: process.env.DB_HOST!,
+      port: Number(process.env.DB_PORT)!,
+      user: process.env.DB_USER!,
+      password: process.env.DB_PASSWORD!,
       dateStrings: true,
     })
 
@@ -24,8 +24,8 @@ export class MySqlConnection
       `CREATE TABLE IF NOT EXISTS users
       (
         id      INT AUTO_INCREMENT NOT NULL,
-        username VARCHAR(30) NOT NULL,
-        email    VARCHAR(255) NOT NULL,
+        username VARCHAR(30) NOT NULL UNIQUE,
+        email    VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
         isAdmin TINYINT(1) NOT NULL,
         
@@ -42,7 +42,6 @@ export class MySqlConnection
         code     TEXT NOT NULL ,
         languaje VARCHAR(25) NOT NULL ,
         created  DATE NOT NULL ,
-        likes    INT NOT NULL ,
         
         PRIMARY KEY (id),
         FOREIGN KEY (userId) REFERENCES users(id)
@@ -58,12 +57,39 @@ export class MySqlConnection
         commentParentId  INT NULL ,
         content  varchar(5000) NOT NULL ,
         created  DATE NOT NULL ,
-        likes    INT NOT NULL ,
         
         PRIMARY KEY (id),
         FOREIGN KEY (userId) REFERENCES users(id),
         FOREIGN KEY (postId) REFERENCES posts(id),
         FOREIGN KEY (commentParentId) REFERENCES comments(id)
+      );
+    `);
+
+    await this.Query(`
+      CREATE TABLE IF NOT EXISTS likes
+      (
+        id         INT AUTO_INCREMENT NOT NULL ,
+        userId     INT NOT NULL ,
+        postId     INT NULL ,
+        commentId  INT NULL ,
+        
+        PRIMARY KEY (id),
+        FOREIGN KEY (userId) REFERENCES users(id),
+        FOREIGN KEY (postId) REFERENCES posts(id),
+        FOREIGN KEY (commentId) REFERENCES comments(id)
+      );
+    `);
+
+    await this.Query(`
+      CREATE TABLE IF NOT EXISTS bookmarks
+      (
+        id      INT AUTO_INCREMENT NOT NULL ,
+        userId  INT NOT NULL ,
+        postId  INT NOT NULL ,
+        
+        PRIMARY KEY (id),
+        FOREIGN KEY (userId) REFERENCES users(id),
+        FOREIGN KEY (postId) REFERENCES posts(id)
       );
     `);
   }

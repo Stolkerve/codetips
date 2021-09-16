@@ -65,14 +65,17 @@
 </template>
 
 <script lang="ts">
-import Seccion from "@/models/Seccion";
-import AuthService from "@/services/AuthService";
-import SeccionModule from "@/store/SeccionModule";
-import {Vue, Component} from "vue-property-decorator"
+import {Vue, Component} from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
+
+import Session from "@/models/Session";
+import AuthService from "@/services/AuthService";
+import SessionModule from "@/store/SessionModule";
+import {emailRules, passwordRules} from "@/utils/validateRules"
 
 @Component
 export default class LoginView extends Vue {
+  sessionModule: SessionModule = getModule(SessionModule);
   email: string = "";
   password: string = "";
 
@@ -81,19 +84,8 @@ export default class LoginView extends Vue {
   showError: boolean = false;
   showSucces: boolean = false;
   loading: boolean = false;
-
-  emailRules = [
-    (v: string) => !!v || 'The email is required.',
-    (v: string) => {
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return pattern.test(v) || 'Invalid e-mail.'
-    }
-  ]
-
-  passwordRules = [
-    (v: string) => !!v || "the password is required",
-    (v: string) => (v && v.length > 8) || "The password most be greater than 8 characters",
-  ]
+  emailRules = emailRules;
+  passwordRules = passwordRules;
 
   async onSubmit() {
     if(this.validate()) {
@@ -107,10 +99,11 @@ export default class LoginView extends Vue {
           this.showSucces = true;
           setTimeout(async ()=>{
             this.showSucces = false;
-            const seccionModule = getModule(SeccionModule);
-            var newSeccion = new Seccion();
-            newSeccion.token = token;
-            seccionModule.setSeccion(newSeccion);
+            
+            var newSession = new Session();
+            newSession.token = token;
+            this.sessionModule.setSession(newSession);
+            this.sessionModule.saveSession();
             await this.$router.push("/");
           }, 2000)
         }

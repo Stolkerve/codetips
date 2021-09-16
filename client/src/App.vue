@@ -1,16 +1,16 @@
 <template>
   <v-app>
     <v-app-bar app dark flat dense>
-      <TopNavComponent :isLogging="this.seccionModule.seccion.token" :dialogCallback="()=>{showDialog = !showDialog;}"/>
+      <TopNavComponent :isLogging="this.sessionModule.session.token" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
     </v-app-bar>
 
     <v-main class="mt-6 main-conteiner">
-      <CreatePostDialogComponent :dialog="showDialog" :dialogCallback="()=>{showDialog = !showDialog}"/>
+      <CreatePostDialogComponent :dialog="showDialog" :closeOpenDialogCallback="()=>{showDialog = !showDialog}"/>
       <v-container class="main-conteiner mb-12">
         <router-view />
       </v-container>
 
-      <BottomNavComponent :isLogging="this.seccionModule.seccion.token"/>
+      <BottomNavComponent :isLogging="this.sessionModule.session.token" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
     </v-main>
   </v-app>
 </template>
@@ -19,10 +19,11 @@
 import { Component, Vue } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 
+import SessionModule from "@/store/SessionModule";
+
 import TopNavComponent from "@/components/TopNavComponent.vue"
 import BottomNavComponent from "@/components/BottomNavComponent.vue"
 import CreatePostDialogComponent from "@/components/CreatePostDialogComponent.vue"
-import SeccionModule from "@/store/SeccionModule";
 
 @Component({
   components: {
@@ -32,7 +33,7 @@ import SeccionModule from "@/store/SeccionModule";
   }
 })
 export default class App extends Vue {
-  seccionModule: SeccionModule = getModule(SeccionModule);
+  sessionModule: SessionModule = getModule(SessionModule);
 
   isLogging: boolean = false;
   showDialog:any = false;
@@ -230,6 +231,10 @@ export default class App extends Vue {
     "yaml",
     "zephir",
   ];
+
+  created() {
+    this.sessionModule.loadSession();
+  }
 }
 </script>
 

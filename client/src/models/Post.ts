@@ -1,5 +1,6 @@
 import { JsonObject, JsonProperty } from "json2typescript";
 import { DateConverter } from "@/models/converters/DateConverter";
+import { BoolConverter } from "@/models/converters/BooleanConverter";
 
 import Comment from "@/models/Comment";
 
@@ -7,6 +8,12 @@ import Comment from "@/models/Comment";
 export default class Post {
   @JsonProperty("id", Number, true)
   id?: number = undefined;
+  @JsonProperty("userId", Number, true)
+  userId?: number = undefined;
+  @JsonProperty("likes", Number, true)
+  likes: number = 0;
+  @JsonProperty("liked", BoolConverter, true)
+  liked?: boolean = undefined;
   @JsonProperty("username", String, true)
   username?: String = undefined;
   @JsonProperty("title", String, true)
@@ -17,8 +24,6 @@ export default class Post {
   languaje?: string = undefined;;
   @JsonProperty("created", String, true)
   created?: string = undefined;
-  @JsonProperty("likes", Number, true)
-  likes: number = 0;
   @JsonProperty("comments", [Comment], true)
   comments?: Comment[] = undefined;
 }

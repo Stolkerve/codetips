@@ -13,10 +13,10 @@
       </v-col>
       <template v-if="isLogging">
         <v-col>
-          <v-avatar class="" color="grey darken-1" size="32"></v-avatar>
+          <AvatarMenuComponent/>
         </v-col>
         <v-col order="2">
-          <v-btn icon tile @click="dialog = !dialog">
+          <v-btn icon tile @click="closeOpenDialogCallback">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-col>
@@ -32,9 +32,15 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import AvatarMenuComponent from "@/components/AvatarMenuComponent.vue"
 
-@Component
+@Component({
+  components: {
+    AvatarMenuComponent
+  }
+})
 export default class BottomNavComponent extends Vue {
+  @Prop() closeOpenDialogCallback!: any;
   @Prop() isLogging!: boolean;
 }
 </script>

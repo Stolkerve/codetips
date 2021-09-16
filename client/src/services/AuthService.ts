@@ -1,9 +1,8 @@
 import axios from "axios";
-import { jsonConvert } from "@/services/tools/jsonConverter";
-import User from "@/models/User";
 import { getModule } from "vuex-module-decorators";
-import SeccionModule from "@/store/SeccionModule";
-import Seccion from "@/models/Seccion";
+
+import SessionModule from "@/store/SessionModule";
+import Session from "@/models/Session";
 
 export default class AuthService {
   static async SignUp(username: string, email: string, password: string): Promise<boolean> {
@@ -11,7 +10,7 @@ export default class AuthService {
       const res = await axios.post("http://localhost:3000/api/autho/signup", {username, email, password});
       return true;
     } catch (error: any) {
-      console.error(error);
+      console.log(error);
     }
     return false;
   }
@@ -21,8 +20,15 @@ export default class AuthService {
       const res = await axios.post("http://localhost:3000/api/autho/login", {email, password})
       return res.data.token;
     } catch (error: any) {
-      console.error(error);
+      console.log(error);
     }
     return undefined;
+  }
+
+  static async Logout(component: Vue) {
+    const sessionModule: SessionModule = getModule(SessionModule);
+    sessionModule.session.token = undefined;
+    sessionModule.saveSession();
+    component.$router.replace("/");
   }
 }

@@ -1,6 +1,8 @@
 <template>
   <v-container class="py-0 fill-height">
     <v-row no-gutters align="center">
+
+      <!-- Title -->
       <v-col
         :class="
           !this.$vuetify.breakpoint.smAndDown ? '' : 'd-flex justify-center'
@@ -17,24 +19,28 @@
           >CodeTips</v-btn
         >
       </v-col>
+
+      <!-- Search bar -->
       <v-col
         v-if="!this.$vuetify.breakpoint.smAndDown"
         class="d-flex justify-end"
-        order="12"
+        order="11"
       >
         <v-responsive max-width="600">
           <v-text-field dense flat hide-details rounded solo-inverted>
           </v-text-field>
         </v-responsive>
       </v-col>
+
+      <!-- Is logged and is not a phone -->
       <template v-if="isLogging && !this.$vuetify.breakpoint.smAndDown">
         <v-col class="mr-4" cols="auto" order="1">
-          <v-avatar color="grey darken-1" size="32"></v-avatar>
+          <AvatarMenuComponent/>
         </v-col>
         <v-col cols="auto" order="3">
           <v-btn
             class="no-background-hover"
-            v-on:click="dialogCallback()"
+            v-on:click="closeOpenDialogCallback"
             icon
             dark
             ><v-icon>mdi-plus</v-icon></v-btn
@@ -49,6 +55,8 @@
           >
         </v-col>
       </template>
+
+      <!-- Is not logged and is a phone -->
       <template v-if="!isLogging">
         <v-col
           :class="this.$vuetify.breakpoint.smAndDown ? 'd-flex justify-end' : ''"
@@ -74,10 +82,15 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import AvatarMenuComponent from "@/components/AvatarMenuComponent.vue"
 
-@Component
+@Component({
+  components: {
+    AvatarMenuComponent
+  }
+})
 export default class TopNavComponent extends Vue {
   @Prop() isLogging!: boolean;
-  @Prop() dialogCallback!: any;
+  @Prop() closeOpenDialogCallback!: any;
 }
 </script>

@@ -1,15 +1,26 @@
 <template>
   <v-row justify="center">
     <v-dialog
-      transition="dialog-bottom-transition"
       :value="dialog"
+      :fullscreen="this.$vuetify.breakpoint.smAndDown"
+      transition="dialog-bottom-transition"
       width="90%"
       overlay-opacity="1"
-      @click:outside="dialogCallback"
+      @click:outside="closeOpenDialogCallback"
     >
       <template v-slot:default>
-        <v-card dark>
-          <v-card-title class="">Title</v-card-title>
+        <v-card dark tile>
+          <div class="d-flex justify-end">
+            <v-btn
+              icon
+              small
+              color="blue"
+              @click="closeOpenDialogCallback"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+          <v-card-title class="pt-2">Title</v-card-title>
           <v-form
             ref="form"
             v-model="validForm"
@@ -82,7 +93,7 @@ import PostsServise from "@/services/PostsService"
 
 @Component
 export default class CreatePostDialogComponent extends Vue {
-  @Prop() dialogCallback!: any;
+  @Prop() closeOpenDialogCallback!: any;
   @Prop() dialog!: boolean;
   loading: boolean = false;
   validForm: boolean = true;
@@ -91,7 +102,7 @@ export default class CreatePostDialogComponent extends Vue {
   code: string = "";
   selectedLanguaje: string = "";
 
-  supportedLanguajes: string[] = [
+  readonly supportedLanguajes: string[] = [
     "1c",
     "abnf",
     "accesslog",
@@ -286,16 +297,16 @@ export default class CreatePostDialogComponent extends Vue {
 
   titleRules = [
     (v: string) => !!v || 'The title is required.',
-  ]
+  ];
 
   codeRules = [
     (v: string) => !!v || 'The code is required.',
     (v: string) => (v && v.length <= 50000 )|| 'Max 50000 characters',
-  ]
+  ];
 
   lenguajesRules = [
     (v: any) => !!v || 'The languaje is required.',
-  ]
+  ];
 
   handleTab(e: any) {
     if (e) {
@@ -312,7 +323,7 @@ export default class CreatePostDialogComponent extends Vue {
       this.loading = true;
       await PostsServise.createPost(this.title, this.code, this.selectedLanguaje);
       this.loading = false;
-      this.dialogCallback();
+      this.closeOpenDialogCallback();
       this.reset();
     }
   }
@@ -328,5 +339,7 @@ export default class CreatePostDialogComponent extends Vue {
   resetValidation () {
     (this.$refs.form as Vue & { resetValidation: () => boolean }).resetValidation();
   }
+
+
 }
 </script>
