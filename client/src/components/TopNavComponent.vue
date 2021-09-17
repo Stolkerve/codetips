@@ -5,7 +5,7 @@
       <!-- Title -->
       <v-col
         :class="
-          !this.$vuetify.breakpoint.smAndDown ? '' : 'd-flex justify-center'
+          !this.$vuetify.breakpoint.smAndDown && isLogging ? '' : 'd-flex justify-start'
         "
         :cols="!this.$vuetify.breakpoint.smAndDown ? 'auto' : ''"
         :order="isLogging ? 2 : 1"

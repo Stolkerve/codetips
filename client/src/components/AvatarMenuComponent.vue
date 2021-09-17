@@ -20,12 +20,9 @@
           </v-btn>
         </template>
         <v-card>
-          <v-list-item-content class="justify-center pb-0">
+          <!-- <v-list-item-content class="justify-center py-0">
             <div class="mx-auto text-center">
-              <h4>{{ 'user.fullName' }}</h4>
-              <p class="text-caption my-1">
-                {{ 'user.email' }}
-              </p>
+              <h4 class="my-2 pa-0">{{this.sessionModule.session.user.username}}</h4>
               <v-divider></v-divider>
               <v-btn
                 class="no-background-hover"
@@ -47,7 +44,36 @@
               </v-btn>
               <v-divider></v-divider>
             </div>
-          </v-list-item-content>
+          </v-list-item-content> -->
+          <v-list>
+            <div class="d-flex justify-center">
+              <h4 class="mb-2 pa-0">{{this.sessionModule.session.user.username}}</h4>
+            </div>
+            <v-divider></v-divider>
+            <v-list-item-group>
+              <v-list-item
+                dense
+              >
+                <v-list-item-icon class="mx-0 mr-2">
+                  <v-icon>mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <p class="ma-0">account</p>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                dense
+                @click="logoutHandle"
+              >
+                <v-list-item-icon class="mx-0 mr-2">
+                  <v-icon>mdi-exit-to-app</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <p class="ma-0">disconnect</p>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
         </v-card>
       </v-menu>
     </v-row>
@@ -56,16 +82,21 @@
 
 <script lang="ts">
 import {Vue, Component} from "vue-property-decorator"
-import AvatarComponent from "@/components/AvatarComponent.vue"
-import AuthService from "@/services/AuthService"
+import { getModule } from "vuex-module-decorators";
+
+import AvatarComponent from "@/components/AvatarComponent.vue";
+import AuthService from "@/services/AuthService";
+import SessionModule from "@/store/SessionModule";
 @Component({
   components: {
     AvatarComponent
   }
 })
 export default class AvatarMenuComponent extends Vue {
+  sessionModule: SessionModule = getModule(SessionModule);
   logoutHandle() {
     AuthService.Logout(this);
+    
   }
 }
 </script>

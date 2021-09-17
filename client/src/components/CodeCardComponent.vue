@@ -18,11 +18,11 @@
           align="center"
         >
           <AvatarComponent class="ml-2"/>
-          <v-card-subtitle>{{post.username}}</v-card-subtitle>
+          <v-card-subtitle class="pa-3">{{post.username}}</v-card-subtitle>
         </v-row>
       </v-col>
       <v-col>
-        <v-card-title class="card-title">{{post.title}}</v-card-title>
+        <v-card-title class="pa-3">{{post.title}}</v-card-title>
       </v-col>
     </v-row>
     <div class="code-conteiner">

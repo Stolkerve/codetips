@@ -33,13 +33,14 @@ router.get("/allauth", authoMiddleware, async (req: Request , res: Response) => 
   try {
     const userId: number = res.locals.user.id;
     const posts:any = await MySqlConnection.Query(`
-      SELECT posts.*, users.username, COUNT(likes.userId) AS likes, (IF(likes.userId = ?, TRUE, FALSE)) AS liked
-      FROM posts 
-        LEFT JOIN users ON users.id = posts.userId
-        LEFT JOIN likes ON posts.id = likes.postId
-        GROUP BY posts.id
-        ORDER BY posts.id DESC;`,
-        [userId]
+      SELECT
+        posts.*, users.username, COUNT(likes.userId) AS likes,
+        (SELECT IF(likes.userId = ? , TRUE, FALSE) FROM likes WHERE likes.userId = ? AND likes.postId = posts.id) AS liked
+          FROM posts
+          LEFT JOIN users ON users.id = posts.userId
+          LEFT JOIN likes ON likes.postId = posts.id
+          GROUP BY posts.id ORDER BY posts.id DESC;`,
+      [userId, userId]
     );
     if(await posts.length) {
       for(let i = 0; i < posts.length; i++) {
@@ -152,7 +153,6 @@ router.delete("/like/:postId", authoMiddleware, async (req: Request, res: Respon
     if(userId && postId)
     {
       await MySqlConnection.Query("DELETE FROM likes WHERE (userId = ? AND postId = ?)", [userId, postId]);
-      console.log(Number(postId));
       const likes:any = await getLikesOfPost(Number(postId));
       return res.json(likes[0]);
     }
@@ -165,11 +165,47 @@ router.delete("/like/:postId", authoMiddleware, async (req: Request, res: Respon
 
 router.post("/bookmark", authoMiddleware, async (req: Request, res: Response) => {
   try {
-    
+    const userId: number = res.locals.user.id;
+    const postId: number = req.body.postId;
+
+    if(userId && postId)
+    {
+      const dbRes:any = await MySqlConnection.Query(`
+        INSERT INTO bookmarks(userId, postId)
+          SELECT ?, ? FROM dual
+          WHERE NOT EXISTS (SELECT * FROM bookmarks WHERE userId = ? AND postId = ?);`,
+        [userId, postId, userId, postId]
+      );
+
+      if(dbRes.affectedRows) {
+        return res.sendStatus(200);
+      }
+      else return res.status(400).send("You already like it");
+    }
+
+    return res.sendStatus(400).send("token or postId missing");
   } catch (error:any) {
     console.log(error);
   }
 });
+
+
+router.delete("/bookmark/:postId", authoMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId: number = res.locals.user.id;
+    const postId = req.params.postId;
+    if(userId && postId)
+    {
+      await MySqlConnection.Query("DELETE FROM bookmarks WHERE (userId = ? AND postId = ?)", [userId, postId]);
+      return res.sendStatus(200);
+    }
+
+    return res.sendStatus(400).send("token or postId missing");
+  } catch (error:any) {
+    console.log(error);
+  }
+});
+
 
 router.post("/comment", authoMiddleware, async (req: Request, res: Response) => {
   try {

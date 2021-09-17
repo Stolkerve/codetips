@@ -68,14 +68,11 @@
 import {Vue, Component} from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 
-import Session from "@/models/Session";
 import AuthService from "@/services/AuthService";
-import SessionModule from "@/store/SessionModule";
 import {emailRules, passwordRules} from "@/utils/validateRules"
 
 @Component
 export default class LoginView extends Vue {
-  sessionModule: SessionModule = getModule(SessionModule);
   email: string = "";
   password: string = "";
 
@@ -91,25 +88,7 @@ export default class LoginView extends Vue {
     if(this.validate()) {
       this.showError = false;
       this.loading = true;
-      const token = await AuthService.Login(this.email, this.password);
-      setTimeout(() => {
-        this.loading = false;
-        if(token) {
-          this.reset();
-          this.showSucces = true;
-          setTimeout(async ()=>{
-            this.showSucces = false;
-            
-            var newSession = new Session();
-            newSession.token = token;
-            this.sessionModule.setSession(newSession);
-            this.sessionModule.saveSession();
-            await this.$router.push("/");
-          }, 2000)
-        }
-        this.showError = true;
-        this.reset();
-      }, 1500);
+      await AuthService.Login(this, this.email, this.password);
     }
   }
 

@@ -27,7 +27,6 @@ export default class PostsService {
       const res = await axios.get("http://localhost:3000/api/posts/allauth",
         { headers: generateHeaderAuth(this.sessionModule.session.token!) }
       );
-
       return jsonConvert.deserializeArray(res.data, Post);
     } catch(error: any) {
       console.log(error);

@@ -41,7 +41,11 @@ router.post("/login", async (req: Request, res: Response) => {
           username: existingUsers[0].username,
           email: existingUsers[0].email,
           isAdmin: existingUsers[0].isAdmin
-        })
+        }),
+        user: {
+          username: existingUsers[0].username,
+          email: existingUsers[0].email,
+        }
       });
     }
 
