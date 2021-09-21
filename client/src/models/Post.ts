@@ -14,6 +14,8 @@ export default class Post {
   likes: number = 0;
   @JsonProperty("liked", BoolConverter, true)
   liked?: boolean = undefined;
+  @JsonProperty("bookmarked", BoolConverter, true)
+  bookmarked?: boolean = undefined;
   @JsonProperty("username", String, true)
   username?: String = undefined;
   @JsonProperty("title", String, true)

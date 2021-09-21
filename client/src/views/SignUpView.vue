@@ -14,6 +14,7 @@
           >
             <v-card-subtitle class="pa-0">Username</v-card-subtitle>
             <v-text-field
+              class="ma-0 pt-0"
               v-model="username"
               :rules="userRules"
               :disabled="loading || showSucces"
@@ -22,28 +23,23 @@
             ></v-text-field>
 
             <v-card-subtitle class="pa-0">Email</v-card-subtitle>
-            <v-text-field
+            <EmailInputComponent
               v-model="email"
-              :rules="emailRules"
-              :disabled="loading || showSucces"
-              maxlength="255"
-              @keydown.enter="onSubmit()"
-            >
-            </v-text-field>
+              :loading="loading"
+              :showSucces="showSucces"
+              @enterpressed="onSubmit()"
+            />
 
             <v-card-subtitle class="pa-0">Password</v-card-subtitle>
-            <v-text-field
+            <PasswordInputComponent
               v-model="password"
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="showPassword ? 'text' : 'password'"
-              :rules="passwordRules"
-              :disabled="loading || showSucces"
-              maxlength="255"
-              @click:append="showPassword = !showPassword"
-              @keydown.enter="onSubmit()"
-            ></v-text-field>
+              :loading="loading"
+              :showSucces="showSucces"
+              @enterpressed="onSubmit()"
+            />
 
             <v-btn
+              class="mt-1"
               color="primary"
               :disabled="loading || showSucces"
               dark
@@ -79,27 +75,29 @@
 import {Vue, Component} from "vue-property-decorator"
 
 import AuthServise from "@/services/AuthService"
-import {emailRules, passwordRules} from "@/utils/validateRules"
+import PasswordInputComponent from "@/components/PasswordInputComponent.vue"
+import EmailInputComponent from "@/components/EmailInputComponent.vue"
+import { requiredRule } from "@/utils/validateRules"
 
-@Component
+@Component({
+  components: {
+    PasswordInputComponent,
+    EmailInputComponent
+  }
+})
 export default class SignUpView extends Vue {
   username: string = "";
   email: string = "";
   password: string = "";
 
   validForm: boolean = true;
-  showPassword:boolean = false;
   showError: boolean = false;
   showSucces: boolean = false;
   loading: boolean = false;
 
   userRules = [
-    (v: string) => !!v || 'Name is required.',
+    requiredRule("name"),
   ];
-
-  emailRules = emailRules;
-
-  passwordRules = passwordRules;
 
   async onSubmit() {
     if(this.validate()) {

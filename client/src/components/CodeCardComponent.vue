@@ -17,19 +17,32 @@
           no-gutters
           align="center"
         >
-          <AvatarComponent class="ml-2"/>
-          <v-card-subtitle class="pa-3">{{post.username}}</v-card-subtitle>
+          <v-btn
+            class="ml-4 no-background-hover"
+            :ripple="false"
+            icon
+            small
+          >
+            <AvatarComponent/>
+          </v-btn>
+          <v-card-subtitle class="pa-3 font-weight-light">{{post.username}}</v-card-subtitle>
         </v-row>
       </v-col>
-      <v-col>
-        <v-card-title class="pa-3">{{post.title}}</v-card-title>
+      <v-col cols="auto">
+        <v-card-title
+          style="font-size: 1.20rem;"
+          :class="isMyPost() ? 'pa-2 red--text text--lighten-2' : ''"
+        >{{post.title}}</v-card-title>
+      </v-col>
+      <v-col class="d-flex justify-end">
+        <PostOptionsComponent :isMyPost="isMyPost()"/>
       </v-col>
     </v-row>
     <div class="code-conteiner">
-      <highlight language="cpp">{{post.code}}</highlight>
+      <highlight :language="post.languaje">{{post.code}}</highlight>
     </div>
     <v-row
-      class="mx-2"
+      class="mx-2 mt-1"
       no-gutters
       align="center"
     >
@@ -39,11 +52,11 @@
       >
         <v-btn
           class="pa-0 ml-1 no-background-hover"
+          :color="post.liked ? 'red' : ''"
+          :disabled="isLogging() == undefined || loadinglike"
+          :loading="loadinglike"
           text
           icon
-          :color="post.liked ? 'red' : ''"
-          :disabled="sessionModule.session.token == undefined || loadinglike"
-          :loading="loadinglike"
           @click="handleLike"
         >
           <v-icon>mdi-heart</v-icon>
@@ -59,7 +72,6 @@
           class="pa-0 ml-1 no-background-hover"
           text
           icon
-          :disabled="sessionModule.session.token == undefined"
         >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
@@ -67,19 +79,19 @@
       </v-col>
 
       <v-col
+        v-if="sessionModule.session.token"
         class="d-flex align-center"
         cols="auto"
       >
         <v-btn
           class="pa-0 ml-1 no-background-hover"
           icon
-          :disabled="sessionModule.session.token == undefined"
         >
           <v-icon>mdi-bookmark</v-icon>
         </v-btn>
       </v-col>
 
-      <v-col cols="auto">
+      <v-col class="ml-1" cols="auto">
         <v-chip small>{{post.languaje}}</v-chip>
       </v-col>
 
@@ -88,15 +100,19 @@
       </v-col>
 
     </v-row>
-    <v-text-field
-      class="mx-4"
+    <v-textarea
+      v-if="isLogging()"
+      style="font-size: 15px;"
+      class="mx-4 mt-0"
       label="comment"
       append-outer-icon="mdi-send"
       type="text"
+      row-height="16"
+      rows="2"
+      auto-grow
       @click:append-outer="() => {}"
-      dense
     >
-    </v-text-field>
+    </v-textarea>
   </v-card>
 </template>
 
@@ -104,23 +120,33 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import hljs from "highlight.js"
 import { getModule } from "vuex-module-decorators";
-const Highlight = require("vue-highlight-component"
-)
+const Highlight = require("vue-highlight-component")
+
 import Post from "@/models/Post"
 import SessionModule from "@/store/SessionModule";
-import AvatarComponent from "@/components/AvatarComponent.vue"
 import PostsService from "@/services/PostsService";
+import AvatarComponent from "@/components/AvatarComponent.vue"
+import PostOptionsComponent from "@/components/PostOptionsComponent.vue"
 
 @Component({
   components: {
     Highlight,
-    AvatarComponent
+    AvatarComponent,
+    PostOptionsComponent
   }
 })
 export default class CodeCardComponent extends Vue {
   @Prop() post!: Post;
   sessionModule: SessionModule = getModule(SessionModule);
   loadinglike: boolean = false;
+
+  isLogging() {
+    return this.sessionModule.session.token;
+  }
+
+  isMyPost() {
+    return this.sessionModule.session.user!.username == this.post.username;
+  }
 
   async handleLike() {
     const xd = () => { setTimeout(()=>{this.post.liked = !this.post.liked; this.loadinglike = !this.loadinglike;}, 200) };
@@ -150,7 +176,7 @@ export default class CodeCardComponent extends Vue {
 .code-conteiner {
   padding: 1em;
   padding-top: 0px;
-  max-height: 350px;
+  max-height: 400px;
   min-height: 200px;
   overflow-y: scroll;
   background:#282c34;

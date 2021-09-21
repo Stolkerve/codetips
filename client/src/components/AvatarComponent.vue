@@ -1,13 +1,9 @@
 <template>
-  <v-avatar
-    size="32"
-  >
-    <v-img
-      src="https://cdn.vuetifyjs.com/images/john.jpg"
-      alt="avatar"
-    >
-    </v-img>
-  </v-avatar>
+  <!-- <v-avatar>
+  </v-avatar> -->
+  <v-icon large>
+    mdi-account-circle
+  </v-icon>
 </template>
 
 <script lang="ts">
@@ -15,6 +11,5 @@ import {Vue, Component} from "vue-property-decorator"
 
 @Component
 export default class AvatarComponent extends Vue {
-
 }
 </script>

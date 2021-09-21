@@ -1,12 +1,17 @@
+const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export const emailRules = [
-  (v: string) => !!v || 'The email is required.',
+  requiredRule("email"),
   (v: string) => {
-    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    return pattern.test(v) || 'Invalid e-mail.'
+    return emailPattern.test(v) || 'Invalid e-mail.'
   }
 ];
 
 export const passwordRules = [
-  (v: string) => !!v || "the password is required",
+  requiredRule("password"),
   (v: string) => (v && v.length > 8) || "The password most be greater than 8 characters",
 ]
+
+export function requiredRule(name: string) {
+  return (v: string) => !!v || `the ${name} is required`;
+}

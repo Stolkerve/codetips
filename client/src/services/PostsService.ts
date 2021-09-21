@@ -27,6 +27,7 @@ export default class PostsService {
       const res = await axios.get("http://localhost:3000/api/posts/allauth",
         { headers: generateHeaderAuth(this.sessionModule.session.token!) }
       );
+
       return jsonConvert.deserializeArray(res.data, Post);
     } catch(error: any) {
       console.log(error);
@@ -72,4 +73,20 @@ export default class PostsService {
       console.log(error);
     }
   }
-}
+
+  static async bookmark(postId: number) {
+    try {
+      await axios.post("http://localhost:3000/api/posts/bookmark", {postId}, {headers: generateHeaderAuth(this.sessionModule.session.token!)});
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  static async disBookmark(postId: number) {
+      try {
+        await axios.delete(`http://localhost:3000/api/posts/bookmark/${postId}`, {headers: generateHeaderAuth(this.sessionModule.session.token!)});
+      } catch (error: any) {
+        console.log(error);
+      }
+    }
+  }

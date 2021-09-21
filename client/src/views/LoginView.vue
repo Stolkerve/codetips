@@ -13,24 +13,20 @@
             lazy-validation
           >
             <v-card-subtitle class="pa-0">Email</v-card-subtitle>
-            <v-text-field
+            <EmailInputComponent
               v-model="email"
-              :rules="emailRules"
-              :disabled="loading || showSucces"
-              maxlength="255"
-              @keydown.enter="onSubmit()"
-            ></v-text-field>
+              :loading="loading"
+              :showSucces="showSucces"
+              @enterpressed="onSubmit()"
+            />
+            
             <v-card-subtitle class="pa-0">Password</v-card-subtitle>
-            <v-text-field
+            <PasswordInputComponent
               v-model="password"
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="showPassword ? 'text' : 'password'"
-              :rules="passwordRules"
-              :disabled="loading || showSucces"
-              maxlength="255"
-              @click:append="showPassword = !showPassword"
-              @keydown.enter="onSubmit()"
-            ></v-text-field>
+              :loading="loading"
+              :showSucces="showSucces"
+              @enterpressed="onSubmit()"
+            />
 
             <v-btn
               :disabled="loading || showSucces"
@@ -66,12 +62,17 @@
 
 <script lang="ts">
 import {Vue, Component} from "vue-property-decorator";
-import { getModule } from "vuex-module-decorators";
 
+import EmailInputComponent from "@/components/EmailInputComponent.vue";
+import PasswordInputComponent from "@/components/PasswordInputComponent.vue";
 import AuthService from "@/services/AuthService";
-import {emailRules, passwordRules} from "@/utils/validateRules"
 
-@Component
+@Component({
+  components: {
+    PasswordInputComponent,
+    EmailInputComponent
+  }
+})
 export default class LoginView extends Vue {
   email: string = "";
   password: string = "";
@@ -81,8 +82,6 @@ export default class LoginView extends Vue {
   showError: boolean = false;
   showSucces: boolean = false;
   loading: boolean = false;
-  emailRules = emailRules;
-  passwordRules = passwordRules;
 
   async onSubmit() {
     if(this.validate()) {

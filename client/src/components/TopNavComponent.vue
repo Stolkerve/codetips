@@ -47,12 +47,13 @@
           >
         </v-col>
         <v-col cols="auto" order="4">
-          <v-btn
+          <!-- <v-btn
             class="no-background-hover"
             icon
             dark
-            ><v-icon>mdi-bell</v-icon></v-btn
-          >
+            ><v-icon>mdi-bell</v-icon>
+          </v-btn> -->
+          <BellMenuComponent/>
         </v-col>
       </template>
 
@@ -83,10 +84,12 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import AvatarMenuComponent from "@/components/AvatarMenuComponent.vue"
+import BellMenuComponent from "@/components/BellMenuComponent.vue"
 
 @Component({
   components: {
-    AvatarMenuComponent
+    AvatarMenuComponent,
+    BellMenuComponent
   }
 })
 export default class TopNavComponent extends Vue {

@@ -35,7 +35,8 @@ router.get("/allauth", authoMiddleware, async (req: Request , res: Response) => 
     const posts:any = await MySqlConnection.Query(`
       SELECT
         posts.*, users.username, COUNT(likes.userId) AS likes,
-        (SELECT IF(likes.userId = ? , TRUE, FALSE) FROM likes WHERE likes.userId = ? AND likes.postId = posts.id) AS liked
+        (SELECT IF(likes.userId = ? , TRUE, FALSE) FROM likes WHERE likes.userId = ? AND likes.postId = posts.id) AS liked,
+        (SELECT IF(bookmarks.userId = 14 , TRUE, FALSE) FROM bookmarks WHERE bookmarks.userId = 14 AND bookmarks.postId = posts.id) AS bookmarked
           FROM posts
           LEFT JOIN users ON users.id = posts.userId
           LEFT JOIN likes ON likes.postId = posts.id

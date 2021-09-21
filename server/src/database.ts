@@ -92,6 +92,18 @@ export class MySqlConnection
         FOREIGN KEY (postId) REFERENCES posts(id)
       );
     `);
+
+    // await this.Query(`
+    //   CREATE TABLE IF NOT EXISTS follows
+    //   (
+    //     id      INT AUTO_INCREMENT NOT NULL ,
+    //     followedUserId  INT NOT NULL ,
+    //     followerUserId  INT NOT NULL ,
+        
+    //     PRIMARY KEY (id),
+    //     --FOREIGN KEY (userId) REFERENCES users(id),
+    //   );
+    // `);
   }
 
   static async Query(query: string, values: any | any[] | { [param: string]: any } = undefined) {

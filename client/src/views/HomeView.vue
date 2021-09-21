@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div v-if="loading" class="d-flex justify-center align-center">
-      <v-progress-circular indeterminate size="50" width="6"></v-progress-circular>
+    <div v-if="loading" class="d-flex justify-center">
+      <v-progress-circular
+        size="50"
+        width="6"
+        color="blue"
+        indeterminate
+      >
+      </v-progress-circular>
     </div>
     <v-row v-else v-for="(p, index) in this.postModule.posts" :key="index">
       <v-col class="px-0">

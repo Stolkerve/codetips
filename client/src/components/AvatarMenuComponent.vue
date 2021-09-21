@@ -20,31 +20,6 @@
           </v-btn>
         </template>
         <v-card>
-          <!-- <v-list-item-content class="justify-center py-0">
-            <div class="mx-auto text-center">
-              <h4 class="my-2 pa-0">{{this.sessionModule.session.user.username}}</h4>
-              <v-divider></v-divider>
-              <v-btn
-                class="no-background-hover"
-                depressed
-                text
-                small
-              >
-                Account
-              </v-btn>
-              <v-divider></v-divider>
-              <v-btn
-                class="no-background-hover"
-                depressed
-                text
-                small
-                @click="logoutHandle"
-              >
-                Disconnect
-              </v-btn>
-              <v-divider></v-divider>
-            </div>
-          </v-list-item-content> -->
           <v-list>
             <div class="d-flex justify-center">
               <h4 class="mb-2 pa-0">{{this.sessionModule.session.user.username}}</h4>
