@@ -12,6 +12,7 @@
         <v-card dark tile>
           <v-card-actions class="justify-end">
             <v-btn
+              class="no-background-hover"
               icon
               small
               color="blue"

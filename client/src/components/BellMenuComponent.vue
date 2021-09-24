@@ -8,9 +8,10 @@
     <template v-slot:activator="{ on }">
       <v-btn
         v-on="on"
-        class="no-background-hover"
+        class="ml-3 no-background-hover"
         icon
         dark
+        small
         ><v-icon>mdi-bell</v-icon>
       </v-btn>
     </template>

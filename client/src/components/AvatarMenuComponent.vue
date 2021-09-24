@@ -11,6 +11,7 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn
+            class="no-background-hover"
             icon
             v-on="on"
             x-small

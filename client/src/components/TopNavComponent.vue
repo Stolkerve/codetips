@@ -42,10 +42,12 @@
         </v-col>
         <v-col cols="auto" order="3">
           <v-btn
-            class="no-background-hover"
+            class="ml-3 no-background-hover"
             v-on:click="closeOpenDialogCallback"
             icon
             dark
+            dense
+            small
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </v-col>
