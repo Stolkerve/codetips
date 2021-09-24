@@ -10,7 +10,7 @@
     >
       <template v-slot:default>
         <v-card dark tile>
-          <div class="d-flex justify-end">
+          <v-card-actions class="justify-end">
             <v-btn
               icon
               small
@@ -19,7 +19,7 @@
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
-          </div>
+          </v-card-actions>
           <v-card-title class="pt-2">Title</v-card-title>
           <v-form
             ref="form"
@@ -68,13 +68,18 @@
                 >
                 </v-autocomplete>
               </v-col>
-              <v-col class="d-flex justify-end">
-                <v-btn
-                  class="mb-3"
-                  color="primary"
-                  :disabled="loading"
-                  @click="onSubmit()"
-                >Post this!</v-btn>
+              <v-col>
+                <v-card-actions class="justify-end">
+                  <v-btn
+                    class="mb-3"
+                    color="primary"
+                    :disabled="loading"
+                    @click="onSubmit()"
+                  >
+                    Post this!
+                  </v-btn>
+
+                </v-card-actions>
               </v-col>
             </v-row>
             <div v-show="loading">
@@ -90,6 +95,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import PostsServise from "@/services/PostsService"
+import {requiredRule, maxCharsRule} from "@/utils/validateRules"
 
 @Component
 export default class CreatePostDialogComponent extends Vue {
@@ -296,16 +302,16 @@ export default class CreatePostDialogComponent extends Vue {
   ];
 
   titleRules = [
-    (v: string) => !!v || 'The title is required.',
+    requiredRule("title")
   ];
 
   codeRules = [
-    (v: string) => !!v || 'The code is required.',
-    (v: string) => (v && v.length <= 50000 )|| 'Max 50000 characters',
+    requiredRule("code"),
+    maxCharsRule(80000)
   ];
 
   lenguajesRules = [
-    (v: any) => !!v || 'The languaje is required.',
+    requiredRule("languaje")
   ];
 
   handleTab(e: any) {

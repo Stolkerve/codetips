@@ -15,3 +15,7 @@ export const passwordRules = [
 export function requiredRule(name: string) {
   return (v: string) => !!v || `the ${name} is required`;
 }
+
+export function maxCharsRule(number: Number) {
+  return (v: string) => (v && v.length <= number ) || `Max ${number} characters`;
+}

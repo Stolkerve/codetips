@@ -10,14 +10,17 @@
         :cols="!this.$vuetify.breakpoint.smAndDown ? 'auto' : ''"
         :order="isLogging ? 2 : 1"
       >
-        <v-btn
-          style="font-family: 'Libre Baskerville', serif !important"
-          class="pa-0 title no-background-hover"
-          :ripple="false"
-          to="/"
-          text
-          >CodeTips</v-btn
+        <router-link
+          style="
+            font-family: 'Libre Baskerville', serif !important;
+            text-decoration: none;
+            color: white;
+            font-size: 25px;
+          "
+          :to="'/'"
         >
+          CodeTips
+        </router-link>
       </v-col>
 
       <!-- Search bar -->
@@ -64,13 +67,13 @@
           order="2"
         >
           <v-btn
-            class="pa-0 mx-1 no-background-hover"
+            class="ml-2 no-background-hover"
             to="/login"
             small
             text
           >Login</v-btn>
           <v-btn
-            class="pa-0 mx-1 no-background-hover"
+            class=" no-background-hover"
             to="/signup"
             small
             text

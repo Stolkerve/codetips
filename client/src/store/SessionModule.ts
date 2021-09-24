@@ -1,7 +1,8 @@
+import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
+
 import store from "@/store/store";
 import Session from "@/models/Session";
 
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
 
 @Module({dynamic: true, store, name: "SessionModule"})
 export default class SessionModule extends VuexModule {

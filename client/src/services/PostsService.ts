@@ -89,4 +89,12 @@ export default class PostsService {
         console.log(error);
       }
     }
+    
+    static async deletePost(postId: number) {
+      try {
+        await axios.delete(`http://localhost:3000/api/posts/${postId}`, {headers: generateHeaderAuth(this.sessionModule.session.token!)});
+      } catch (error: any) {
+        console.log(error);
+      }
+    }
   }

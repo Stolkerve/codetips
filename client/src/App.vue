@@ -1,16 +1,18 @@
 <template>
   <v-app>
     <v-app-bar app dark flat dense>
-      <TopNavComponent :isLogging="this.sessionModule.session.token" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
+      <TopNavComponent :isLogging="isLogging()" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
     </v-app-bar>
 
     <v-main class="mt-6 main-conteiner">
       <CreatePostDialogComponent :dialog="showDialog" :closeOpenDialogCallback="()=>{showDialog = !showDialog}"/>
       <v-container class="main-conteiner mb-12">
         <router-view />
+        <DialogComponent/>
       </v-container>
 
-      <BottomNavComponent :isLogging="this.sessionModule.session.token" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
+      <BottomNavComponent :isLogging="isLogging()" :closeOpenDialogCallback="()=>{showDialog = !showDialog;}"/>
+      <SnackBarComponent/>
     </v-main>
   </v-app>
 </template>
@@ -24,18 +26,21 @@ import SessionModule from "@/store/SessionModule";
 import TopNavComponent from "@/components/TopNavComponent.vue"
 import BottomNavComponent from "@/components/BottomNavComponent.vue"
 import CreatePostDialogComponent from "@/components/CreatePostDialogComponent.vue"
+import SnackBarComponent from "@/components/SnackBarComponent.vue";
+import DialogComponent from "@/components/DialogComponent.vue";
 
 @Component({
   components: {
     TopNavComponent,
     BottomNavComponent,
-    CreatePostDialogComponent
+    CreatePostDialogComponent,
+    SnackBarComponent,
+    DialogComponent
   }
 })
 export default class App extends Vue {
   sessionModule: SessionModule = getModule(SessionModule);
 
-  isLogging: boolean = false;
   showDialog:any = false;
 
   selectedLanguaje: string = "";
@@ -232,6 +237,10 @@ export default class App extends Vue {
     "zephir",
   ];
 
+  isLogging() {
+    return this.sessionModule.session.token;
+  }
+
   created() {
     this.sessionModule.loadSession();
   }
@@ -267,5 +276,9 @@ export default class App extends Vue {
 
 .no-background-hover::before {
   background-color: transparent !important;
+}
+
+.v-application code {
+  background-color: initial !important;
 }
 </style>

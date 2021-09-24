@@ -57,35 +57,21 @@ router.get("/allauth", authoMiddleware, async (req: Request , res: Response) => 
   }
 });
 
-// router.get("/post/:id", async (req: Request, res: Response) => {
-//   try {
-//     const post:any = await MySqlConnection.Query("", [req.params.id]);
-//     if(await post.length) {
-//       post[0].comments = await MySqlConnection.Query("SELECT * FROM comments WHERE postId = ? ORDER BY id DESC", [post[0].id]);
-//       return res.json(jsonConvert.serializeObject(post[0], Post));
-//     }
-//     return res.sendStatus(404);
-//   } catch(error: any) {
-//     console.log(error);
-//     return res.sendStatus(500); // mysql error
-//   }
-// });
+router.delete("/:id", authoMiddleware, async (req: Request, res: Response) => {
+  try {
+    const postId = req.params.id;
+    const userId: number = res.locals.user.id;
+    if(userId && postId)
+    {
+      await MySqlConnection.Query("DELETE FROM posts WHERE userId = ? AND id = ?", [userId, postId]);
+      return res.sendStatus(200);
+    }
 
-// router.get("/user/:id", async (req: Request, res: Response) => {
-//   try {
-//     const posts:any = await MySqlConnection.Query("", [req.params.id]);
-//     if(posts.length) {
-//       for(let i = 0; i < posts.length; i++) {
-//         posts[i].comments = await MySqlConnection.Query("SELECT * FROM comments WHERE postId = ?", [posts[i].id]);
-//       }
-//       return res.json(jsonConvert.serializeArray(posts, Post));
-//     }
-//     return res.sendStatus(404);
-//   } catch(error: any) {
-//     console.log(error);
-//     return res.sendStatus(500); // mysql error
-//   }
-// });
+    return res.sendStatus(400).send("token or post id missing");
+  } catch (error:any) {
+    console.log(error);
+  }
+});
 
 router.post("/", authoMiddleware, async (req: Request, res: Response) => {
   try {
@@ -181,10 +167,10 @@ router.post("/bookmark", authoMiddleware, async (req: Request, res: Response) =>
       if(dbRes.affectedRows) {
         return res.sendStatus(200);
       }
-      else return res.status(400).send("You already like it");
+      else return res.status(400).send("You bookmarked like it");
     }
 
-    return res.sendStatus(400).send("token or postId missing");
+    return res.sendStatus(400).send("token or post id missing");
   } catch (error:any) {
     console.log(error);
   }
@@ -201,7 +187,7 @@ router.delete("/bookmark/:postId", authoMiddleware, async (req: Request, res: Re
       return res.sendStatus(200);
     }
 
-    return res.sendStatus(400).send("token or postId missing");
+    return res.sendStatus(400).send("token or post id missing");
   } catch (error:any) {
     console.log(error);
   }
