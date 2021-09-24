@@ -40,10 +40,13 @@ const router = new VueRouter({
   routes
 })
 
-const sessionModule: SessionModule = getModule(SessionModule);
 router.beforeEach((to: Route, from: Route, next: Function) => {
-  if (to.name == 'Login' && !sessionModule.session.token) { next({ name: "Home" }) };
-  if (to.name == 'Signup' && !sessionModule.session.token) { next({ name: "Home" }) };
+  const sessionModule: SessionModule = getModule(SessionModule);
+  if (sessionModule.session && sessionModule.session.token) {
+    sessionModule.saveSession();
+  }
+  sessionModule.loadSession();
+  if ((to.name == 'Login' || to.name == 'Signup') && sessionModule.session.token ) { next({ name: "Home" }) };
   next();
 });
 

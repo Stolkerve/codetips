@@ -240,10 +240,6 @@ export default class App extends Vue {
   isLogging() {
     return this.sessionModule.session.token;
   }
-
-  created() {
-    this.sessionModule.loadSession();
-  }
 }
 </script>
 

@@ -29,6 +29,7 @@
             <v-list-item-group>
               <v-list-item
                 dense
+                @click="goToYourProfile"
               >
                 <v-list-item-icon class="mx-0 mr-2">
                   <v-icon>mdi-account</v-icon>
@@ -39,7 +40,7 @@
               </v-list-item>
               <v-list-item
                 dense
-                @click="logoutHandle"
+                @click="handleLogout"
               >
                 <v-list-item-icon class="mx-0 mr-2">
                   <v-icon>mdi-exit-to-app</v-icon>
@@ -70,9 +71,13 @@ import SessionModule from "@/store/SessionModule";
 })
 export default class AvatarMenuComponent extends Vue {
   sessionModule: SessionModule = getModule(SessionModule);
-  logoutHandle() {
+  handleLogout() {
     AuthService.Logout(this);
-    
   }
+
+  goToYourProfile() {
+    this.$router.push(`/profile/${this.sessionModule.session.user?.username}`);
+  }
+
 }
 </script>

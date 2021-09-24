@@ -1,5 +1,11 @@
 <template>
-
+  <v-card
+    dark
+  >
+    <v-card-text>
+      It is your profile xd
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
