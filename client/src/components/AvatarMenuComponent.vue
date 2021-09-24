@@ -34,7 +34,7 @@
                   <v-icon>mdi-account</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <p class="ma-0">account</p>
+                  <p class="ma-0">profile</p>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item
